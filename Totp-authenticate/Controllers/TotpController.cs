@@ -29,8 +29,11 @@ namespace Totp_authenticate.Controllers
 
         public string GenerateOtp(string email)
         {
-            var secretKey = EncodingKey.ToBytes("ff3ue");
-            var totp = new OtpG(secretKey);
+            //var secretKey = EncodingKey.ToBytes("ff3ue");
+            var secretKey = _config.GetValue<string>("OTP:secretKey");
+            var key = Base32Encoding.ToBytes(secretKey);
+            
+            var totp = new OtpG(key);
             var otp = totp.ComputeTotp();
 
             var verifyUser=_db.getUser(email);  
